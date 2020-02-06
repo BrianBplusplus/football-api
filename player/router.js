@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const Player = require("./model");
+const Team = require("../team/model");
 
 const router = new Router();
 
@@ -10,8 +11,8 @@ router.get("/players", (req, res, next) => {
 
 router.post("/players", (req, res, next) => {
   console.log("REQUEST BODY TO CREATE A PLAYER", req.body);
-  const { playerName } = req.body;
-  Player.create({ name: playerName })
+  const { name, number, teamId } = req.body;
+  Player.create({ name: name, number: number, teamId: teamId })
     .then(player => {
       console.log("Created the player!");
       res.json(player);
@@ -22,7 +23,7 @@ router.post("/players", (req, res, next) => {
 router.get("/players/:id", (req, res, next) => {
   const playerId = parseInt(req.params.id);
   console.log("ID of the player: ", playerId);
-  Player.findByPk(playerId).then(player => {
+  Player.findByPk(playerId, { include: [Team] }).then(player => {
     if (!player) {
       res.status(404).send("Player not found!");
     } else {

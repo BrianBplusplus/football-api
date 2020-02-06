@@ -10,8 +10,8 @@ router.get("/teams", (req, res, next) => {
 
 router.post("/teams", (req, res, next) => {
   console.log("REQUEST BODY TO CREATE TEAM", req.body);
-  const { teamName } = req.body;
-  Team.create({ name: teamName })
+  // const { teamName } = req.body;
+  Team.create(req.body)
     .then(team => {
       console.log("Created the team!");
       res.json(team);
